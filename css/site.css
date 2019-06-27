@@ -1,0 +1,68 @@
+/**** FONTS ****/
+@font-face {
+  font-family: 'Gotham-Bold';
+  src: url("../fonts/Gotham-Bold.eot");
+  src: url("../fonts/Gotham-Bold.woff") format("woff");
+  font-style: normal;
+  font-stretch: normal; 
+}
+
+@font-face {
+  font-family: 'Gotham-Light';
+  src: url("../fonts/Gotham-Light.eot");
+  src: url("../fonts/Gotham-Light.woff") format("woff");
+  font-style: normal;
+  font-stretch: normal; 
+}
+
+@font-face {
+  font-family: 'SourceSansPro-Regular';
+  src: url("../fonts/SourceSansPro-Regular.eot");
+  src: url("../fonts/SourceSansPro-Regular.woff") format("woff");
+  font-style: normal;
+  font-stretch: normal; 
+}
+
+/**** ELEMENTS ****/
+body {
+	font-family: 'SourceSansPro-Regular';
+}
+h1 {
+	font-family: 'SourceSansPro-Regular';
+	font-size: 19px;
+	margin-top: 0;
+	text-transform: uppercase;
+}
+.description-text > p {
+	margin-bottom: 30px;
+}
+h2 {
+	font-family: 'SourceSansPro-Regular';
+	font-size: 14px;
+	margin-top: 0;
+	margin-bottom: 10px;
+	text-transform: uppercase;
+}
+
+a {
+	text-decoration: underline;
+}
+
+#map {
+    height: 400px;
+    width: 100%;
+    margin-bottom: 7px;
+    margin-top: 10px;
+}
+
+.dc-chart g.row text {
+    fill: black;
+}
+.d3-tip {
+  padding:5px;
+  background-color:white;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  font-size:1em;
+}
