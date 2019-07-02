@@ -30,8 +30,9 @@ body {
 h1 {
 	font-family: 'SourceSansPro-Regular';
 	font-size: 19px;
-	margin-top: 10;
-	text-transform: uppercase;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	/* text-transform: uppercase; */
 }
 .description-text > p {
 	margin-bottom: 30px;

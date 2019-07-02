@@ -146,10 +146,5 @@ var dataCall = $.ajax({
 $.when(geomCall, dataCall).then(function(geomArgs, dataArgs){
     var geom = geomArgs[0];
     var data = hxlProxyToJSON(dataArgs[0]);
-    // data.forEach(function(element){
-    //     isNaN(parseInt(element['#reached'])) ? element['#reached']=0 : console.log('is nan');
-    //     var s = parseInt(element['#reached']);
-    //     console.log(s)
-    // });
     generateCharts(geom, data);
 });
