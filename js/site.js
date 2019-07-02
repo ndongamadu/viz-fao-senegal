@@ -28,6 +28,16 @@ function hxlProxyToJSON(input){
 var blue = '#007CE0';
 var blueLight = '#72B0E0';
 var green = '#06C0B4';
+var femaleColor = '#EFA497';
+var maleColor = '#F4C799';
+
+function sortTotal(a, b){
+    return a.value.total > b.value.total ? -1 : a.value.total < b.value.total ? 1 : 0 ;
+}
+
+function sortDelivery(a, b){
+    return a.value.delivery > b.value.delivery ? -1 : a.value.delivery < b.value.delivery ? 1 : 0 ;
+}
 
 function generateCharts(geom, data) {
     var mapChart = dc.leafletChoroplethChart('#map');
@@ -55,9 +65,31 @@ function generateCharts(geom, data) {
     var indicGroup = indicDim.group();
     var projectGroup = projectDim.group();
     var oddGroup = oddDim.group();
-    // var projectGroup = projectDim.group().reduceSum(function(d){
-    //     return d['#reached'];
-    // });
+
+    var pGroup = projectDim.group().reduce(
+        function(p,v){
+            p.totalF += Number(v['#reached+f']);
+            p.totalM += Number(v['#reached+m']);
+            p.total += Number(v['#reached']);
+            p.delivery += Number(v['#indicator+delivery']);
+            return p;
+        },
+        function(p,v){
+            p.totalF -= Number(v['#reached+f']);
+            p.totalM -= Number(v['#reached+m']);
+            p.total -= Number(v['#reached']);
+            p.delivery -= Number(v['#indicator+delivery']);
+            return p;
+        },
+        function(){
+            return {
+                totalF: 0,
+                totalM: 0,
+                total: 0,
+                delivery: 0
+            };
+        }
+    ).top(Infinity).sort(sortTotal);
 
     indicChart.width(400)
               .height(210)
@@ -114,13 +146,7 @@ function generateCharts(geom, data) {
             }).popup(function(feature){
                 return feature.properties['ADM1_FR'];
             });
-            // .featureOptions({
-            //     'fillColor': 'gray',
-            //     'color': 'gray',
-            //     'opacity': 0.3,
-            //     'fillOpacity': 0.1,
-            //     'weight': 1
-            // });
+
     dc.renderAll();
     var map = mapChart.map();
     zoomToGeom(geom);
@@ -129,6 +155,83 @@ function generateCharts(geom, data) {
         var bounds = d3.geo.bounds(geom);
         map.fitBounds([[bounds[0][1],bounds[0][0]],[bounds[1][1],bounds[1][0]]]);
     }
+
+    var xReached = ['x'],
+        reachedTotal = ['Total'],
+        reachedFemale = ['Femmes'],
+        reachedMale = ['Hommes'],
+        xDelivery = ['x'],
+        delivery = ['Delivery'];
+    for (var i = 0; i < pGroup.length; i++) {
+        if (pGroup[i].value.total !=0) {
+            xReached.push(pGroup[i].key);
+            reachedTotal.push(pGroup[i].value.total);
+            reachedMale.push([pGroup[i].value.totalM]);
+            reachedFemale.push(pGroup[i].value.totalF);
+        }
+    }
+    pGroup.sort(sortDelivery);
+    for (var i = 0; i < pGroup.length; i++) {
+        if (pGroup[i].value.delivery !=0) {
+            xDelivery.push(pGroup[i].key);
+            delivery.push(pGroup[i].value.delivery);
+        }
+    }
+
+    c3.generate({
+        bindto: '#reachedBarchart',
+        data: {
+            x: 'x',
+            columns: [xReached, reachedTotal, reachedMale, reachedFemale],
+            colors: {
+                'Total': blueLight,
+                'Femmes': femaleColor,
+                'Hommes': maleColor
+            },
+            type: 'bar'
+        },
+        axis: {
+            x: {
+                type: 'category',
+                tick: {
+                    outer: false
+                }
+            }
+        },
+        padding: {bottom:50}
+    });
+
+    c3.generate({
+        bindto: '#deliveryBarchart',
+        data: {
+            x: 'x',
+            columns: [xDelivery, delivery],
+            color: [blueLight],
+            type: 'bar'
+        },
+        axis: {
+            x: {
+                type: 'category',
+                tick: {
+                    outer: false,
+                    culling: true,
+                }
+            },
+            y: {
+                tick: {
+                    outer: false
+                }
+            }
+        },
+        padding: {bottom:50},
+        tooltip: {
+            format: {
+                value: function(value, ration, id){
+                    return value+'%';
+                }
+            }
+        }
+    });
 }
 
 var geomCall = $.ajax({

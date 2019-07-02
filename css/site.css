@@ -29,9 +29,9 @@ body {
 }
 h1 {
 	font-family: 'SourceSansPro-Regular';
-	font-size: 19px;
-	margin-top: 10px;
-	margin-bottom: 10px;
+	font-size: 24px;
+	margin-top: 15px;
+	margin-bottom: 20px;
 	/* text-transform: uppercase; */
 }
 .description-text > p {
@@ -40,8 +40,8 @@ h1 {
 h2 {
 	font-family: 'SourceSansPro-Regular';
 	font-size: 14px;
-	margin-top: 0;
-	margin-bottom: 10px;
+	margin-top: 5px;
+	/* margin-bottom: 10px; */
 	text-transform: uppercase;
 }
 
